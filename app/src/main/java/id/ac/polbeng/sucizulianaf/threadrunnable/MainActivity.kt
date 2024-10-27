@@ -1,5 +1,4 @@
 package id.ac.polbeng.sucizulianaf.threadrunnable
-
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import id.ac.polbeng.sucizulianaf.threadrunnable.databinding.ActivityMainBinding
@@ -10,18 +9,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.button.setOnClickListener {
-            val runnable = Worker()
-            val thread = Thread(runnable)
-            thread.start()
-        }
-    }
-    inner class Worker : Runnable {
-        override fun run() {
-            killSomeTime()
+            Thread {
+                killSomeTime()
+            }.start()
         }
     }
     private fun killSomeTime() {
         for (i in 1..20) {
+            runOnUiThread {
+                binding.textView.text = i.toString()
+            }
             Thread.sleep(2000)
             println("i: $i")
         }
